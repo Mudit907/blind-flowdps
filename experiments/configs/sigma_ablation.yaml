@@ -1,0 +1,33 @@
+# Even/odd sigma discretization ablation
+# Sweeps sigma from 5 to 15 on 20 DIV2K images to study the ~37pp performance gap
+# Run: python scripts/ablate_sigma.py --config experiments/configs/sigma_ablation.yaml
+
+experiment:
+  project: "blind-flowdps"
+  run_name: "sigma_ablation_even_odd"
+  seed: 42
+
+data:
+  dataset: "div2k"
+  data_dir: "data/DIV2K_valid_HR"
+  num_images: 20
+  img_size: 256
+
+# Sigma values to sweep — both even and odd to study the pattern
+ablation:
+  sigma_values: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+  use_oracle: true    # Give solver the true sigma (isolates discretization from estimation error)
+
+diffusion:
+  model: "sd3-medium"
+  NFE: 28
+  cfg_scale: 2.0
+  prompt: "a high quality photo"
+
+data_consistency:
+  stepsize: 15.0
+  num_iters: 7
+
+logging:
+  log_wandb: true
+  output_dir: "experiments/results/sigma_ablation"
